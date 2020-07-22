@@ -39,7 +39,7 @@ def loopfunction(Url = 0):
             findAhref = listRecipe.find('a', {"class": "media"})
             if findAhref is not None:
                 fixUrl = 'https://cookpad.com' + findAhref['href']
-                fOpen.write(fixUrl.strip() + "%d\n")
+                fOpen.write(fixUrl.strip() + "\n")
                 # urList.append()
         paginate = mainContainer.find('div', {"class": "pagination"})
         nextUrl = paginate.find('a', {"class": "pagination__next"})
