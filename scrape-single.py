@@ -89,12 +89,12 @@ def getSingle(url, category):
                 errorFile = open('error_single.log', "a+")
                 errorFile.write(myUrl + "\n")
 
-                saveError = open('error.html', 'w')
-                saveError.write(str(pageSoup))
-
                 print('Error getting image, may caused by proxy')
                 print('------------------------')
         else:
+            errorFile = open('error_single.log', "a+")
+            errorFile.write(myUrl + "\n")
+
             print('Error Getting Title Recipe')
             print('------------------------')
     except requests.exceptions.HTTPError as errh:
