@@ -4,3 +4,7 @@ recipe/*
 tmp/*
 error.html
 error_single.log
+!log/.gitkeep
+!recipe/.gitkeep
+!results/.gitkeep
+!tmp/.gitkeep
