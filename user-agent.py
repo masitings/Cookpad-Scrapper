@@ -6,6 +6,7 @@ def harvestProxy():
 
     headers = {
         'x-rapidapi-host': "user-agent-strings.p.rapidapi.com",
+        # Use your own rapidapi apikey.
         'x-rapidapi-key': "d03a2f0d45msh07d2e7be11560d3p15275cjsn22b01f05fa5a"
     }
 
