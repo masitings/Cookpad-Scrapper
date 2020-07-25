@@ -10,9 +10,9 @@ from urllib.error import URLError, HTTPError
 def getProxy():
     openProxy = open("proxy.txt", "r")
     readProxy = openProxy.read()
-    proxy = readProxy.split(",")
+    proxy = readProxy.split("\n")
     randomProxy = random.choice(proxy)
-    return randomProxy
+    return 'http://' + randomProxy
 
 def getUa():
     openUa = open("ua.txt", "r")

@@ -17,9 +17,9 @@ def getUa():
 def getProxy():
     openProxy = open("proxy.txt", "r")
     readProxy = openProxy.read()
-    proxy = readProxy.split(",")
+    proxy = readProxy.split("\n")
     randomProxy = random.choice(proxy)
-    return randomProxy
+    return 'http://' + randomProxy
 
 def randCategory(array):
     openProxy = open("kategori.txt", "r")
