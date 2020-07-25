@@ -45,7 +45,7 @@ def getSingle(url, category):
 
         # get title and main image
         
-        if pageSoup.h1.string is not None:
+        if pageSoup.h1 is not None:
             recipeTitle = pageSoup.h1.string.strip()
             images = pageSoup.find('div', {"class":"tofu_image"})
             if images is not None:
