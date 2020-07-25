@@ -1,72 +1,76 @@
-import urllib.request
 import json
+import random
 import uuid
 import time
+import requests
 from bs4 import BeautifulSoup as soup
 from urllib.error import URLError, HTTPError
 
+def getProxy():
+    openProxy = open("proxy.txt", "r")
+    readProxy = openProxy.read()
+    proxy = readProxy.split(",")
+    randomProxy = random.choice(proxy)
+    return randomProxy
+
+def getUa():
+    openUa = open("ua.txt", "r")
+    readUa = openUa.read()
+    ua = readUa.split("|")
+    randomUa = random.choice(ua)
+    return randomUa
+
+def randCategory(array):
+    openProxy = open("kategori.txt", "r")
+    readProxy = openProxy.read()
+    proxy = readProxy.split("|")
+    return proxy[array]
 
 
-def loopfunction(Url = 0):
-    if Url is not 0:
-        myUrl = Url
+def loopfunction(search, page = 0):
+
+    if (page > 1):
+        myUrl = 'https://cookpad.com/id/cari/'+ str(search) +'?page=' + str(page)
     else:
-        myUrl = 'https://cookpad.com/id/cari/resep%20masakan%20indonesia'
+        myUrl = 'https://cookpad.com/id/cari/' + str(search)
     
-    req = urllib.request.Request(
-        myUrl, 
-        data=None, 
-        headers={
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36'
-        }
-    )
+    headers = {"User-Agent": getUa()}
+    proxies = {'http': getProxy()}
 
     urList = []
     recipeId = uuid.uuid1()
-    fOpen = open("recipe.txt", "a+")
+    fOpen = open("recipe/" + str(search) + ".txt", "a+")
+    fError = open("log/"+ str(search) +".txt", "a+")
 
     try: 
-        uClient = urllib.request.urlopen(req)
-        pageHtml = uClient.read()
-        uClient.close()
+        uClient = requests.get(myUrl, headers=headers, proxies=proxies)
+        pageHtml = uClient.text
         pageSoup = soup(pageHtml, "html.parser")
-
         mainContainer = pageSoup.find('div', {"id":"main_contents"})
-        recipeUl = mainContainer.find('ul', {"class":"recipe-list"})
-        recipeList = recipeUl.find_all('li', {"class":"ranked-list__item"})
+        if mainContainer is not None:
+            recipeUl = mainContainer.find('ul', {"class":"recipe-list"})
+            recipeList = recipeUl.find_all('li', {"class":"ranked-list__item"})
 
-        for listRecipe in recipeList:
-            findAhref = listRecipe.find('a', {"class": "media"})
-            if findAhref is not None:
-                fixUrl = 'https://cookpad.com' + findAhref['href']
-                fOpen.write(fixUrl.strip() + "\n")
-                # urList.append()
-        paginate = mainContainer.find('div', {"class": "pagination"})
-        nextUrl = paginate.find('a', {"class": "pagination__next"})
-        urlPaginate = 'https://cookpad.com' + nextUrl['href']
-        if Url is not 0:
-            print("Success Scrape Paginate : " + urlPaginate)
+            for listRecipe in recipeList:
+                findAhref = listRecipe.find('a', {"class": "media"})
+                if findAhref is not None:
+                    fixUrl = 'https://cookpad.com' + findAhref['href']
+                    fOpen.write(fixUrl.strip() + "\n")
+            print("Category : " + str(search) + " | Halaman : " + str(page))
         else:
-            print("Success Scrape First Page")
-        # Sleep Time
-        time.sleep(5)
-        # Then Continue
-        loopfunction(urlPaginate)
+            print('Main Container tidak ditemukan : ' + str(page))
+            fError.write(str(page) + ",")
+
     except HTTPError as e:
-        print('Error code: ', e.code)
-        time.sleep(5)
-        if Url is not 0:
-            loopfunction(Url)
-        else:
-            loopfunction()
-    except URLError as e:
-        print('Reason: ', e.reason)
-        time.sleep(5)
-        if Url is not 0:
-            loopfunction(Url)
-        else:
-            loopfunction()
-    
-    
-loopfunction()
+        print('Kode Error: ', e.code)
+        fError.write(str(page) + ",")
 
+    except URLError as e:
+        print('Alasan Error : ', e.reason)
+        fError.write(str(page) + ",")
+
+
+# loopfunction()
+for i in range(0, 120):
+    for a in range (0, 18):
+        loopfunction(randCategory(i), a)
