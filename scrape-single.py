@@ -4,7 +4,6 @@ import json
 import os
 from bs4 import BeautifulSoup as soup
 from slugify import slugify
-from urllib.error import URLError, HTTPError
 from urllib.parse import unquote, urlparse
 from pathlib import PurePosixPath
 
@@ -90,10 +89,14 @@ def getSingle(myUrl, category):
             errorFile = open('error_single.log', "a+")
             errorFile.write(myUrl + "\n")
             print('Error getting image, may caused by proxy')
-    except HTTPError as e:
-        print('Kode Error: ', e.code)
-    except URLError as e:
-        print('Alasan Error : ', e.reason)
+    except requests.exceptions.HTTPError as errh:
+        print ("Http Error:",errh)
+    except requests.exceptions.ConnectionError as errc:
+        print ("Error Connecting:",errc)
+    except requests.exceptions.Timeout as errt:
+        print ("Timeout Error:",errt)
+    except requests.exceptions.RequestException as err:
+        print ("OOps: Something Else",err)
 
 def looping():
     a = []
@@ -103,5 +106,6 @@ def looping():
         readCat = catOpen.read()
         cat = readCat.split("\n")
         for url in cat:
-            getSingle(url, category)
+            if url:
+                getSingle(url, category)
 looping()
