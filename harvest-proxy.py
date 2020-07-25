@@ -8,7 +8,7 @@ def harvest():
         'x-rapidapi-host': "getproxylist-getproxylist-v1.p.rapidapi.com",
         'x-rapidapi-key': "d03a2f0d45msh07d2e7be11560d3p15275cjsn22b01f05fa5a"
     }
-    fOpen = open("proxy.txt", "a+")
+    fOpen = open("tmp/proxy.txt", "a+")
     response = requests.request("GET", url, headers=headers, params=querystring)
     if response.status_code is not 200:
         print('Limit Exceed')

@@ -15,28 +15,26 @@ from pathlib import PurePosixPath
 #     return randomUa
 
 def getApiKey():
-    openKey = open("scrapperApi.txt", "r")
+    openKey = open("tmp/api.txt", "r")
     readKey = openKey.read()
     apiKey = readKey.split("\n")
-    randomApi = apiKey.choice(proxy)
+    randomApi = random.choice(apiKey)
     return str(randomApi)
 
 def randCategory(array):
-    openProxy = open("kategori.txt", "r")
+    openProxy = open("tmp/kategori.txt", "r")
     readProxy = openProxy.read()
     proxy = readProxy.split("|")
     return proxy[array]
 
 def getCategory(array):
-    openProxy = open("kategori.txt", "r")
+    openProxy = open("tmp/kategori.txt", "r")
     readProxy = openProxy.read()
     proxy = readProxy.split("|")
     return proxy[array]
 
 def getSingle(url, category):
-
     myUrl = 'http://api.scraperapi.com?api_key=' + getApiKey() + '&url=' + url
-
     try:
         uClient = requests.get(myUrl)
         pageHtml = uClient.text

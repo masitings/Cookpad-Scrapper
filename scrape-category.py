@@ -8,26 +8,16 @@ from bs4 import BeautifulSoup as soup
 from urllib.error import URLError, HTTPError
 
 def getApiKey():
-    openKey = open("scrapperApi.txt", "r")
+    openKey = open("tmp/api.txt", "r")
     readKey = openKey.read()
     apiKey = readKey.split("\n")
-    randomApi = apiKey.choice(proxy)
+    randomApi = random.choice(apiKey)
     return str(randomApi)
-
-def getUa():
-    openUa = open("ua.txt", "r")
-    readUa = openUa.read()
-    ua = readUa.split("|")
-    randomUa = random.choice(ua)
-    return randomUa
 
 def getCategory():
     url = 'https://cookpad.com/id/search_categories'
     myUrl = 'http://api.scraperapi.com?api_key=' + getApiKey() + '&url=' + url
-
-    fOpen = open('kategori.txt', "a+")
-    saveHTML = open('kategori.html', "w")
-
+    fOpen = open('tmp/kategori.txt', "a+")
     try:
         uClient = requests.get(myUrl)
         pageHtml = uClient.text

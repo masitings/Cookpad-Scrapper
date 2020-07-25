@@ -1,3 +1,6 @@
 log/*
 results/*
-scrapperApi.txt
+recipe/*
+tmp/*
+error.html
+error_single.log

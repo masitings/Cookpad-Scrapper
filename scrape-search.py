@@ -7,21 +7,14 @@ from bs4 import BeautifulSoup as soup
 from urllib.error import URLError, HTTPError
 
 def getApiKey():
-    openKey = open("scrapperApi.txt", "r")
+    openKey = open("tmp/api.txt", "r")
     readKey = openKey.read()
     apiKey = readKey.split("\n")
-    randomApi = apiKey.choice(proxy)
+    randomApi = random.choice(apiKey)
     return str(randomApi)
 
-def getUa():
-    openUa = open("ua.txt", "r")
-    readUa = openUa.read()
-    ua = readUa.split("|")
-    randomUa = random.choice(ua)
-    return randomUa
-
 def randCategory(array):
-    openProxy = open("kategori.txt", "r")
+    openProxy = open("tmp/kategori.txt", "r")
     readProxy = openProxy.read()
     proxy = readProxy.split("|")
     return proxy[array]
@@ -35,7 +28,6 @@ def loopfunction(search, page = 0):
         url = 'https://cookpad.com/id/cari/' + str(search)
     
     myUrl = 'http://api.scraperapi.com?api_key=' + getApiKey() + '&url=' + url
-
     urList = []
     recipeId = uuid.uuid1()
     fOpen = open("recipe/" + str(search) + ".txt", "a+")
@@ -71,5 +63,5 @@ def loopfunction(search, page = 0):
 
 # loopfunction()
 for i in range(0, 120):
-    for a in range (0, 18):
+    for a in range (0, 16):
         loopfunction(randCategory(i), a)
