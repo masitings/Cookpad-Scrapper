@@ -11,7 +11,7 @@ def getProxy():
     readProxy = openProxy.read()
     proxy = readProxy.split("\n")
     randomProxy = random.choice(proxy)
-    return 'http://' + randomProxy
+    return 'https://' + randomProxy
 
 def getUa():
     openUa = open("ua.txt", "r")

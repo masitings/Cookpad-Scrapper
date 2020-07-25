@@ -19,7 +19,7 @@ def getProxy():
     readProxy = openProxy.read()
     proxy = readProxy.split("\n")
     randomProxy = random.choice(proxy)
-    return 'http://' + randomProxy
+    return 'https://' + randomProxy
 
 def randCategory(array):
     openProxy = open("kategori.txt", "r")
@@ -34,6 +34,7 @@ def getCategory(array):
     return proxy[array]
 
 def getSingle(myUrl, category):
+
     headers = {"User-Agent": getUa()}
     proxies = {'http': getProxy()}
 
