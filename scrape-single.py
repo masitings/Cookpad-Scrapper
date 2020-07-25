@@ -44,8 +44,9 @@ def getSingle(url, category):
         langkah = []
 
         # get title and main image
-        recipeTitle = pageSoup.h1.string.strip()
-        if recipeTitle is not None:
+        
+        if pageSoup.h1.string is not None:
+            recipeTitle = pageSoup.h1.string.strip()
             images = pageSoup.find('div', {"class":"tofu_image"})
             if images is not None:
                 # get ingredient
