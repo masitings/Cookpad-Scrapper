@@ -7,19 +7,19 @@ from slugify import slugify
 from urllib.parse import unquote, urlparse
 from pathlib import PurePosixPath
 
-def getUa():
-    openUa = open("ua.txt", "r")
-    readUa = openUa.read()
-    ua = readUa.split("|")
-    randomUa = random.choice(ua)
-    return randomUa
+# def getUa():
+#     openUa = open("ua.txt", "r")
+#     readUa = openUa.read()
+#     ua = readUa.split("|")
+#     randomUa = random.choice(ua)
+#     return randomUa
 
-def getProxy():
-    openProxy = open("proxy.txt", "r")
-    readProxy = openProxy.read()
-    proxy = readProxy.split("\n")
-    randomProxy = random.choice(proxy)
-    return 'https://' + randomProxy
+def getApiKey():
+    openKey = open("scrapperApi.txt", "r")
+    readKey = openKey.read()
+    apiKey = readKey.split("\n")
+    randomApi = apiKey.choice(proxy)
+    return str(randomApi)
 
 def randCategory(array):
     openProxy = open("kategori.txt", "r")
@@ -33,13 +33,12 @@ def getCategory(array):
     proxy = readProxy.split("|")
     return proxy[array]
 
-def getSingle(myUrl, category):
+def getSingle(url, category):
 
-    headers = {"User-Agent": getUa()}
-    proxies = {'http': getProxy()}
+    myUrl = 'http://api.scraperapi.com?api_key=' + getApiKey() + '&url=' + url
 
     try:
-        uClient = requests.get(myUrl, headers=headers, proxies=proxies)
+        uClient = requests.get(myUrl)
         pageHtml = uClient.text
         pageSoup = soup(pageHtml, "html.parser")
         # save files
@@ -70,7 +69,7 @@ def getSingle(myUrl, category):
             urlFilename = PurePosixPath(
                 unquote(
                     urlparse(
-                        myUrl
+                        url
                     ).path
                 )
             ).parts[3]

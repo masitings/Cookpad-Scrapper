@@ -7,12 +7,12 @@ import re
 from bs4 import BeautifulSoup as soup
 from urllib.error import URLError, HTTPError
 
-def getProxy():
-    openProxy = open("proxy.txt", "r")
-    readProxy = openProxy.read()
-    proxy = readProxy.split("\n")
-    randomProxy = random.choice(proxy)
-    return 'https://' + randomProxy
+def getApiKey():
+    openKey = open("scrapperApi.txt", "r")
+    readKey = openKey.read()
+    apiKey = readKey.split("\n")
+    randomApi = apiKey.choice(proxy)
+    return str(randomApi)
 
 def getUa():
     openUa = open("ua.txt", "r")
@@ -22,15 +22,14 @@ def getUa():
     return randomUa
 
 def getCategory():
-    myUrl = 'https://cookpad.com/id/search_categories'
-    headers = {"User-Agent": getUa()}
-    proxies = {'http': getProxy()}
+    url = 'https://cookpad.com/id/search_categories'
+    myUrl = 'http://api.scraperapi.com?api_key=' + getApiKey() + '&url=' + url
 
     fOpen = open('kategori.txt', "a+")
     saveHTML = open('kategori.html', "w")
 
     try:
-        uClient = requests.get(myUrl, headers=headers, proxies=proxies)
+        uClient = requests.get(myUrl)
         pageHtml = uClient.text
         pageSoup = soup(pageHtml, "html.parser")
 

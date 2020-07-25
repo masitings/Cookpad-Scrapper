@@ -6,12 +6,12 @@ import requests
 from bs4 import BeautifulSoup as soup
 from urllib.error import URLError, HTTPError
 
-def getProxy():
-    openProxy = open("proxy.txt", "r")
-    readProxy = openProxy.read()
-    proxy = readProxy.split("\n")
-    randomProxy = random.choice(proxy)
-    return 'https://' + randomProxy
+def getApiKey():
+    openKey = open("scrapperApi.txt", "r")
+    readKey = openKey.read()
+    apiKey = readKey.split("\n")
+    randomApi = apiKey.choice(proxy)
+    return str(randomApi)
 
 def getUa():
     openUa = open("ua.txt", "r")
@@ -30,12 +30,11 @@ def randCategory(array):
 def loopfunction(search, page = 0):
 
     if (page > 1):
-        myUrl = 'https://cookpad.com/id/cari/'+ str(search) +'?page=' + str(page)
+        url = 'https://cookpad.com/id/cari/'+ str(search) +'?page=' + str(page)
     else:
-        myUrl = 'https://cookpad.com/id/cari/' + str(search)
+        url = 'https://cookpad.com/id/cari/' + str(search)
     
-    headers = {"User-Agent": getUa()}
-    proxies = {'http': getProxy()}
+    myUrl = 'http://api.scraperapi.com?api_key=' + getApiKey() + '&url=' + url
 
     urList = []
     recipeId = uuid.uuid1()
@@ -43,7 +42,7 @@ def loopfunction(search, page = 0):
     fError = open("log/"+ str(search) +".txt", "a+")
 
     try: 
-        uClient = requests.get(myUrl, headers=headers, proxies=proxies)
+        uClient = requests.get(myUrl)
         pageHtml = uClient.text
         pageSoup = soup(pageHtml, "html.parser")
         mainContainer = pageSoup.find('div', {"id":"main_contents"})
