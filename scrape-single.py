@@ -45,52 +45,57 @@ def getSingle(url, category):
 
         # get title and main image
         recipeTitle = pageSoup.h1.string.strip()
-        images = pageSoup.find('div', {"class":"tofu_image"})
-        if images is not None:
-            # get ingredient
-            mainImage = images.find('img')['src']
-            mainIngridient = pageSoup.find('section', {"id":"ingredients"})
-            ingredientList = mainIngridient.find('div', {"class":"ingredient-list"})
-            ingredients = ingredientList.find_all('li', {"class":"ingredient"})
-            for ingredient in ingredients:
-                ingWrap = ingredient.find('div', {"itemprop":"ingredients"})
-                Qty = ingWrap.find('bdi', {"class":"ingredient__quantity"}).text.strip()
-                if Qty:
-                    bahan.append(ingWrap.text.strip())
-            mainStep = pageSoup.find('section', {"id": "steps"})
-            listStep = mainStep.find_all('li', {"class":"step"})
-            for step in listStep:
-                steps = {}
-                textStep = step.find('div', {"itemprop": "recipeInstructions"}).text.strip()
-                langkah.append(textStep)
+        if recipeTitle is not None:
+            images = pageSoup.find('div', {"class":"tofu_image"})
+            if images is not None:
+                # get ingredient
+                mainImage = images.find('img')['src']
+                mainIngridient = pageSoup.find('section', {"id":"ingredients"})
+                ingredientList = mainIngridient.find('div', {"class":"ingredient-list"})
+                ingredients = ingredientList.find_all('li', {"class":"ingredient"})
+                for ingredient in ingredients:
+                    ingWrap = ingredient.find('div', {"itemprop":"ingredients"})
+                    Qty = ingWrap.find('bdi', {"class":"ingredient__quantity"}).text.strip()
+                    if Qty:
+                        bahan.append(ingWrap.text.strip())
+                mainStep = pageSoup.find('section', {"id": "steps"})
+                listStep = mainStep.find_all('li', {"class":"step"})
+                for step in listStep:
+                    steps = {}
+                    textStep = step.find('div', {"itemprop": "recipeInstructions"}).text.strip()
+                    langkah.append(textStep)
 
-            urlFilename = PurePosixPath(
-                unquote(
-                    urlparse(
-                        url
-                    ).path
-                )
-            ).parts[3]
+                urlFilename = PurePosixPath(
+                    unquote(
+                        urlparse(
+                            url
+                        ).path
+                    )
+                ).parts[3]
 
-            filename = urlFilename + '.json'
-            catName = category.replace('.txt', '')
-            pathFinder = 'results/' + catName + '/' + filename
+                filename = urlFilename + '.json'
+                catName = category.replace('.txt', '')
+                pathFinder = 'results/' + catName + '/' + filename
 
-            os.makedirs(os.path.dirname(pathFinder), exist_ok=True)
-            dataJson = {"title": recipeTitle, "image": mainImage,"bahan": bahan, "langkah": langkah}
-            with open(pathFinder, "a+") as writeJson:
-                json.dump(dataJson, writeJson, ensure_ascii=False)
-                print('Category : ' + catName)
-                print('Filename : ' + filename)
+                os.makedirs(os.path.dirname(pathFinder), exist_ok=True)
+                dataJson = {"title": recipeTitle, "image": mainImage,"bahan": bahan, "langkah": langkah}
+                with open(pathFinder, "a+") as writeJson:
+                    json.dump(dataJson, writeJson, ensure_ascii=False)
+                    print('Category : ' + catName)
+                    print('Filename : ' + filename)
+                    print('------------------------')
+            else:
+                errorFile = open('error_single.log', "a+")
+                errorFile.write(myUrl + "\n")
+
+                saveError = open('error.html', 'w')
+                saveError.write(str(pageSoup))
+
+                print('Error getting image, may caused by proxy')
                 print('------------------------')
         else:
-            errorFile = open('error_single.log', "a+")
-            errorFile.write(myUrl + "\n")
-
-            saveError = open('error.html', 'w')
-            saveError.write(str(pageSoup))
-
-            print('Error getting image, may caused by proxy')
+            print('Error Getting Title Recipe')
+            print('------------------------')
     except requests.exceptions.HTTPError as errh:
         print ("Http Error:",errh)
     except requests.exceptions.ConnectionError as errc:
