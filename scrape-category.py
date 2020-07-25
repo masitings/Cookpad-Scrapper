@@ -45,8 +45,6 @@ def getCategory():
                     rewrite = catTitle.lower().replace(' ', '-')
                     fOpen.write(rewrite + "|")
                     print(rewrite)
-
-
     except HTTPError as e:
         print("Kode Error :", e.code)
     except URLError as e:
