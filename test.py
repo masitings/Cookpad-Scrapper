@@ -1,6 +1,8 @@
-import requests
+from urllib.parse import unquote, urlparse
+from pathlib import PurePosixPath
 
-proxies = {'http': 'http://1.0.0.211:80'}
-reads = requests.get("https://www.tumblr.com/", proxies=proxies)
-# requests.post("https://www.tumblr.com/", proxies=proxies)
-print(reads.text)
+url = 'https://cookpad.com/id/resep/13260747-roti-singkong-pakai-rebread'
+
+
+
+print(result)
