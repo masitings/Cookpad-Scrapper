@@ -11,7 +11,7 @@ def harvestProxy():
     }
 
     # Save proxy 
-    fOpen = open("ua.txt", "a+")
+    fOpen = open("tmp/ua.txt", "a+")
 
     response = requests.request("GET", url, headers=headers)
     jsonResp = json.loads(response.text)
